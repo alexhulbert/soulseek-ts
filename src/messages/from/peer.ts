@@ -1,4 +1,4 @@
-import zlib from 'zlib'
+import { unzipSync } from 'node:zlib'
 
 import type { FileAttribute } from '../common'
 import { TransferDirection } from '../common'
@@ -66,7 +66,7 @@ export const fromPeerMessage = {
   },
   fileSearchResponse: (msg_: MessageParser): FileSearchResponse => {
     const content = msg_.data.slice(msg_.pointer)
-    const buffer = zlib.unzipSync(content)
+    const buffer = unzipSync(content)
 
     const msg = new MessageParser(buffer)
     const username = msg.str()
@@ -143,7 +143,7 @@ export const fromPeerMessage = {
   },
 }
 
-export const fromPeerMessageParser = (msg: MessageParser) => {
+export const fromPeerMessageParser = async (msg: MessageParser) => {
   const size = msg.int32()
   if (size <= 4) return
 

@@ -39,9 +39,10 @@ export class SlskPeer extends (EventEmitter as new () => TypedEventEmitter<SlskP
       this.msgs.write(data)
     })
 
-    this.msgs.on('message', (msg: MessageParser) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    this.msgs.on('message', async (msg: MessageParser) => {
       try {
-        const data = fromPeerMessageParser(msg)
+        const data = await fromPeerMessageParser(msg)
         if (data) {
           this.emit('message', data)
         }
